@@ -126,6 +126,7 @@ const JsonLandingPhone: React.FC<JsonLandingPhoneProps> = ({ content, isPreview 
             <BackgroundMedia
               src={phoneBackgroundUrl}
               lazy
+              pinToViewport
               autoPlay
               loop
               muted
@@ -136,6 +137,7 @@ const JsonLandingPhone: React.FC<JsonLandingPhoneProps> = ({ content, isPreview 
             <BackgroundMedia
               src={desktopBackgroundUrl}
               lazy
+              pinToViewport
               autoPlay
               loop
               muted

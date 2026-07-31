@@ -223,6 +223,7 @@ const JsonLandingFullContent: React.FC<JsonLandingFullContentProps> = ({ content
             <BackgroundMedia
               src={phoneBackgroundUrl}
               lazy
+              pinToViewport
               autoPlay
               loop
               muted
@@ -233,6 +234,7 @@ const JsonLandingFullContent: React.FC<JsonLandingFullContentProps> = ({ content
             <BackgroundMedia
               src={backgroundUrl}
               lazy
+              pinToViewport
               autoPlay
               loop
               muted

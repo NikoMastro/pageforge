@@ -9,6 +9,15 @@ type BackgroundMediaProps = {
   playsInline?: boolean;
   poster?: string;
   lazy?: boolean;
+  /**
+   * Pin the media to the viewport instead of stretching it over the whole
+   * page. Without this, `object-cover` sizes the media against the full
+   * document height (thousands of px on long pages), which zooms the image
+   * enormously. The sticky frame keeps the media exactly one viewport tall
+   * while it follows the scroll — and, unlike `position: fixed`, it stays
+   * inside scaled/overflow containers such as the editor preview.
+   */
+  pinToViewport?: boolean;
 };
 
 const isHls = (url: string) => /\.m3u8(\?|$)/i.test(url);
@@ -34,6 +43,7 @@ const BackgroundMedia: React.FC<BackgroundMediaProps> = ({
   playsInline = true,
   poster,
   lazy = true,
+  pinToViewport = false,
 }) => {
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const shouldUseLazy = lazy && hasIntersectionObserver();
@@ -173,26 +183,42 @@ const BackgroundMedia: React.FC<BackgroundMediaProps> = ({
     };
   }, [showVideo, canInit, url, poster]);
 
+  // When pinned, responsive visibility/z-index classes go on the outer frame
+  // and the media fills a viewport-tall sticky box instead of the whole page.
+  const mediaClassName = pinToViewport
+    ? 'pointer-events-none select-none absolute inset-0 w-full h-full object-cover gpu-accelerated'
+    : `pointer-events-none select-none absolute inset-0 w-full h-full object-cover gpu-accelerated ${className}`;
+
+  const pinWrapper = (media: React.ReactNode) => (
+    <div
+      aria-hidden="true"
+      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
+    >
+      <div className="sticky top-0 h-screen w-full">{media}</div>
+    </div>
+  );
+
   // Render image fallback if not a recognized video url or video failed
   if (showImage) {
-    return (
+    const img = (
       <img
         data-bg-media
         src={url}
         alt="background"
-        className={`pointer-events-none select-none absolute inset-0 w-full h-full object-cover gpu-accelerated ${className}`}
+        className={mediaClassName}
         loading={lazy ? 'lazy' : undefined}
         style={{ willChange: 'transform' }}
       />
     );
+    return pinToViewport ? pinWrapper(img) : img;
   }
 
   if (showVideo) {
-    return (
+    const video = (
       <video
         data-bg-media
         ref={videoRef}
-        className={`pointer-events-none select-none absolute inset-0 w-full h-full object-cover gpu-accelerated ${className}`}
+        className={mediaClassName}
         autoPlay={autoPlay}
         loop={loop}
         muted={muted}
@@ -205,6 +231,7 @@ const BackgroundMedia: React.FC<BackgroundMediaProps> = ({
         style={{ willChange: 'transform' }}
       />
     );
+    return pinToViewport ? pinWrapper(video) : video;
   }
   return null;
 };
