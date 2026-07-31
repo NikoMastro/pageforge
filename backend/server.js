@@ -8,6 +8,9 @@ const ConfigRoute = require("./routes/config/configRoute");
 const LinkbioRoute = require("./routes/linkbio/linkbioRoute");
 const ExperimentRoute = require("./routes/experiment/experimentRoute");
 const CommonRoute = require("./routes/common/commonRoute");
+// Crawler runs in-process from the /crawler package (local dev only).
+// In production it was a GCP Cloud Function proxied by crawlerRoute.js.
+const CrawlerLocalRoute = require("./routes/crawler/crawlerLocalRoute");
 // --- GCP/Cloudflare-backed services — disabled in the public showcase, kept for reference ---
 // const IAPUserRoute = require("./routes/auth/iAPUserRoute");
 // const edgePurgeInvalidation = require("./routes/auth/invalidateCache");
@@ -28,9 +31,10 @@ registry.register("/config", new ConfigRoute());
 registry.register("/linkbio", new LinkbioRoute());
 registry.register("/experiment", new ExperimentRoute());
 registry.register("/common", new CommonRoute());
+registry.register("/crawler", new CrawlerLocalRoute());
 // --- Routes requiring GCP/Cloudflare accounts — disabled in the showcase ---
 // registry.register("/iap", new IAPUserRoute());
-// registry.register("/crawler", new CrawlerRoute());
+// registry.register("/crawler", new CrawlerRoute()); // GCP Cloud Function proxy
 // registry.register("/vertexai", new VertexRoutes());
 
 // Showcase stand-in for the IAP-authenticated user endpoint.

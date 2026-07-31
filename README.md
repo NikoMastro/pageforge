@@ -17,7 +17,8 @@ A visual builder that turns landing pages and link-in-bio profiles into versione
 │   ├── firestoreutils/      Original Firestore storage (kept for reference)
 │   ├── routes/              REST routes; GCP/Cloudflare ones disabled-but-visible
 │   └── utils/               Cloud Build orchestration (disabled in showcase)
-├── crawler/                 GCP Cloud Function: Lighthouse/URL analysis (reference)
+├── crawler/                 URL analyzer (Playwright + Lighthouse) — ran as a GCP
+│                            Cloud Function in production, runs in-process here
 ├── api/                     Vercel serverless wrapper around the Express backend
 └── Docs/                    Architecture & API docs + legacy deploy workflows
 ```
@@ -57,8 +58,18 @@ See `backend/mongoutils/storage.js`.
 
 Import the repo — `vercel.json` builds the frontend and runs the backend as a serverless function under `/api`. Set `MONGODB_URI` (and optionally `MONGODB_DB`) in the Vercel project's environment variables.
 
+### URL Tester (local only)
+
+The URL Tester drives the `crawler/` package **in-process**: Playwright loads the page, Lighthouse audits it, and a battery of pixel/iframe analyzers run. One-time setup:
+
+```bash
+npm run setup:crawler
+```
+
+In production the crawler was a GCP Cloud Function called through an authenticated proxy (`backend/routes/crawler/crawlerRoute.js`, kept for reference). Because it needs a real Chromium, the endpoint is disabled on the hosted Vercel demo.
+
 ## Notes
 
 - The **Deploy** buttons return HTTP 501 in the showcase — deployment needed the client's GCP pipeline.
-- Media library, AI video generation (Vertex AI), URL crawler, and Cloudflare integrations are disabled for the same reason; their code remains for review.
+- Media library, AI video generation (Vertex AI), and Cloudflare integrations are disabled for the same reason; their code remains for review.
 - Legacy CI/CD workflows (Cloud Run deploys via Workload Identity Federation) are parked in `Docs/legacy-workflows/`.
