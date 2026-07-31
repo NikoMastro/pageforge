@@ -29,21 +29,20 @@ Pages were stored in **Firestore**, and "Deploy" pushed the page JSON to a **GCP
 
 ## Run the showcase
 
-Storage is a single MongoDB connection — a free [Atlas M0](https://www.mongodb.com/cloud/atlas) or local Docker works.
+Storage is a single MongoDB connection — a free [Atlas M0](https://www.mongodb.com/cloud/atlas) cluster is the easiest path.
 
 ```bash
 npm install
+cp .env.example .env   # then set MONGODB_URI to your cluster
 
-# Terminal 1 — MongoDB + backend (Docker)
-docker compose up
+# Terminal 1 — backend API
+npm run dev:backend
 
 # Terminal 2 — builder UI
 npm run dev
 ```
 
-Or without Docker: run MongoDB yourself and `MONGODB_URI=... npm run dev:backend`.
-
-The UI runs on `http://localhost:5173`, the API on `http://localhost:8080`. See `.env.example` for configuration.
+The UI runs on `http://localhost:5173`, the API on `http://localhost:8080`. `dev:backend` loads `.env` automatically (Node `--env-file-if-exists`). Alternatively, `docker compose up` starts a local MongoDB + backend without Atlas.
 
 ### Showcase guardrails
 

@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "npm run dev -w @pageforge/frontend",
     "dev:frontend": "npm run dev -w @pageforge/frontend",
-    "dev:backend": "node backend/server.js",
+    "dev:backend": "node --env-file-if-exists=.env backend/server.js",
     "build": "npm run build --workspaces --if-present",
     "build:frontend": "npm run build -w @pageforge/frontend",
     "type-check": "npm run type-check --workspaces --if-present",
