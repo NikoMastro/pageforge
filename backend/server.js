@@ -11,6 +11,9 @@ const CommonRoute = require("./routes/common/commonRoute");
 // Crawler runs in-process from the /crawler package (local dev only).
 // In production it was a GCP Cloud Function proxied by crawlerRoute.js.
 const CrawlerLocalRoute = require("./routes/crawler/crawlerLocalRoute");
+// Read-only media library backed by Cloudinary (replaces Cloudflare Images/Stream).
+// Served under /cloudflare because that's the path the frontend already calls.
+const CloudinaryLibraryRoute = require("./routes/library/cloudinaryLibraryRoute");
 // --- GCP/Cloudflare-backed services — disabled in the public showcase, kept for reference ---
 // const IAPUserRoute = require("./routes/auth/iAPUserRoute");
 // const edgePurgeInvalidation = require("./routes/auth/invalidateCache");
@@ -57,8 +60,11 @@ app.get("/health", (req, res) => {
 // Use the registry router
 app.use(registry.getRouter());
 
+// Read-only showcase media library (Cloudinary) on the legacy /cloudflare path
+app.use("/cloudflare", new CloudinaryLibraryRoute().getRouter());
+
 // --- External integrations — disabled in the showcase, kept for reference ---
-// // Mount cloudflare router
+// // Mount cloudflare router (production Cloudflare Images/Stream)
 // app.use("/cloudflare", cloudfareRouter);
 // // Mount edge-purge (cache invalidation) router
 // app.use("/edge-purge", edgePurgeInvalidation);

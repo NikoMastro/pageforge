@@ -92,7 +92,7 @@ export default function LibraryPage() {
         <div>
           <h1 className="text-3xl font-bold text-white">Media Library</h1>
           <p className="text-gray-300 mt-2">
-            Manage your images and videos stored in Cloudflare {!loading && images.length > 0 && (
+            Browse the showcase media library (read-only) {!loading && images.length > 0 && (
               <span className="text-blue-400">({images.length} items)</span>
             )}
           </p>

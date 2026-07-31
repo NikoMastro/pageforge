@@ -67,8 +67,12 @@ npm run setup:crawler
 
 In production the crawler was a GCP Cloud Function called through an authenticated proxy (`backend/routes/crawler/crawlerRoute.js`, kept for reference). Because it needs a real Chromium, the endpoint is disabled on the hosted Vercel demo.
 
+### Media library (read-only)
+
+In production the library was Cloudflare Images/Stream. The showcase serves a **read-only Cloudinary folder** instead (`backend/routes/library/cloudinaryLibraryRoute.js`): only list/get endpoints exist, results are scoped to one folder, responses are cached, and all upload/edit/delete endpoints return 403. Configure with `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>` (see `.env.example`); linking media by URL in the editor is a plain text field and stays available.
+
 ## Notes
 
 - The **Deploy** buttons return HTTP 501 in the showcase — deployment needed the client's GCP pipeline.
-- Media library, AI video generation (Vertex AI), and Cloudflare integrations are disabled for the same reason; their code remains for review.
+- AI video generation (Vertex AI) and the Cloudflare integrations are disabled; their code remains for review.
 - Legacy CI/CD workflows (Cloud Run deploys via Workload Identity Federation) are parked in `Docs/legacy-workflows/`.
