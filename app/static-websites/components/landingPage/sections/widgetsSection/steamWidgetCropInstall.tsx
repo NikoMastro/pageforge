@@ -59,7 +59,7 @@ const SteamWidgetCropInstall: React.FC<SteamWidgetCropInstallProps> = ({
         height: `${cropDims.cropHeight * scale}px`,
         display: 'inline-block'
       }}
-      data-az-platform="az-steam-desktop"
+      data-pf-platform="pf-steam-desktop"
     >
       <div
         className="relative rounded-sm overflow-hidden"

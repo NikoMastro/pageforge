@@ -80,8 +80,8 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
       let flatKey: string;
       if (prop === 'cta' || prop === 'label') {
         flatKey = `${platform}Cta`; // Flat format uses 'Cta' for both cta and label
-      } else if (prop === 'az-data-platform') {
-        flatKey = `${platform}Id`; // Flat format stores az-data-platform as {platform}Id
+      } else if (prop === 'pf-data-platform') {
+        flatKey = `${platform}Id`; // Flat format stores pf-data-platform as {platform}Id
       } else if (prop === 'dataLabel') {
         flatKey = `${platform}Label`;
       } else if (prop === 'className') {
@@ -129,12 +129,12 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             const steamRaw = (builderState.stores as any)?.steam;
             const url = extractUrl(steamRaw);
             const label = extractLabel(builderState.stores, 'steam');
-            const azDataPlatform = extractProp(builderState.stores, 'steam', 'az-data-platform') || 'steam';
+            const pfDataPlatform = extractProp(builderState.stores, 'steam', 'pf-data-platform') || 'steam';
 
             return isValidUrl(url) ? {
               url: url,
               label: label,
-              'az-data-platform': azDataPlatform,
+              'pf-data-platform': pfDataPlatform,
               dataLabel: extractProp(builderState.stores, 'steam', 'dataLabel'),
               className: extractProp(builderState.stores, 'steam', 'className'),
             } : undefined;
@@ -144,7 +144,7 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             return isValidUrl(url) ? {
               url,
               label: extractLabel(builderState.stores, 'epic'),
-              'az-data-platform': extractProp(builderState.stores, 'epic', 'az-data-platform') || 'epic',
+              'pf-data-platform': extractProp(builderState.stores, 'epic', 'pf-data-platform') || 'epic',
               dataLabel: extractProp(builderState.stores, 'epic', 'dataLabel'),
               className: extractProp(builderState.stores, 'epic', 'className'),
             } : undefined;
@@ -158,7 +158,7 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             return isValidUrl(url) ? {
               url,
               label: extractLabel(builderState.consoles, 'playstation'),
-              'az-data-platform': extractProp(builderState.consoles, 'playstation', 'az-data-platform') || 'playstation',
+              'pf-data-platform': extractProp(builderState.consoles, 'playstation', 'pf-data-platform') || 'playstation',
               dataLabel: extractProp(builderState.consoles, 'playstation', 'dataLabel'),
               className: extractProp(builderState.consoles, 'playstation', 'className'),
             } : undefined;
@@ -168,7 +168,7 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             return isValidUrl(url) ? {
               url,
               label: extractLabel(builderState.consoles, 'xbox'),
-              'az-data-platform': extractProp(builderState.consoles, 'xbox', 'az-data-platform') || 'xbox',
+              'pf-data-platform': extractProp(builderState.consoles, 'xbox', 'pf-data-platform') || 'xbox',
               dataLabel: extractProp(builderState.consoles, 'xbox', 'dataLabel'),
               className: extractProp(builderState.consoles, 'xbox', 'className'),
             } : undefined;
@@ -178,7 +178,7 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             return isValidUrl(url) ? {
               url,
               label: extractLabel(builderState.consoles, 'switch'),
-              'az-data-platform': extractProp(builderState.consoles, 'switch', 'az-data-platform') || 'switch',
+              'pf-data-platform': extractProp(builderState.consoles, 'switch', 'pf-data-platform') || 'switch',
               dataLabel: extractProp(builderState.consoles, 'switch', 'dataLabel'),
               className: extractProp(builderState.consoles, 'switch', 'className'),
             } : undefined;
@@ -192,7 +192,7 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             return isValidUrl(url) ? {
               url,
               label: extractLabel(builderState.mobile, 'ios'),
-              'az-data-platform': extractProp(builderState.mobile, 'ios', 'az-data-platform') || 'ios',
+              'pf-data-platform': extractProp(builderState.mobile, 'ios', 'pf-data-platform') || 'ios',
               dataLabel: extractProp(builderState.mobile, 'ios', 'dataLabel'),
             } : undefined;
           })(),
@@ -201,7 +201,7 @@ export function parseLinkBioFromServer(raw: LinkBioServerShape): ParsedLinkBio {
             return isValidUrl(url) ? {
               url,
               label: extractLabel(builderState.mobile, 'android'),
-              'az-data-platform': extractProp(builderState.mobile, 'android', 'az-data-platform') || 'android',
+              'pf-data-platform': extractProp(builderState.mobile, 'android', 'pf-data-platform') || 'android',
               dataLabel: extractProp(builderState.mobile, 'android', 'dataLabel'),
             } : undefined;
           })(),

@@ -66,7 +66,7 @@ function renderPrimaryLinks(json: LinkBioJson): string {
       ? `<span style=\"display:inline-flex;align-items:center;gap:12px;\"><img src=${JSON.stringify(l.logoUrl)} alt=\"icon\" style=\"width:24px;height:24px;object-fit:contain\"/><span>${escapeHtml(l.label)}</span></span>`
       : escapeHtml(l.label);
     const platform = inferPlatformFromLabel(l.label);
-    return `<a class=\"az-platform=${platform}\" href=${JSON.stringify(l.url)} target=\"_blank\" rel=\"noopener noreferrer\">${content}</a>`;
+    return `<a class=\"pf-platform=${platform}\" href=${JSON.stringify(l.url)} target=\"_blank\" rel=\"noopener noreferrer\">${content}</a>`;
   }).join('')}</div>`;
 }
 
@@ -147,20 +147,20 @@ function renderSocial(json: LinkBioJson): string {
       ? `<img src=${JSON.stringify(e.logoUrl)} alt=\"social\" style=\"width:32px;height:32px;object-fit:contain\"/>`
       : escapeHtml(e.label);
     const platform = e.logoUrl ? 'custom' : (e.label || 'custom');
-    return `<a class=\"az-platform=${escapeHtml(platform.toLowerCase())}\" href=${JSON.stringify(e.url)} target=\"_blank\" rel=\"noopener noreferrer\">${content}</a>`;
+    return `<a class=\"pf-platform=${escapeHtml(platform.toLowerCase())}\" href=${JSON.stringify(e.url)} target=\"_blank\" rel=\"noopener noreferrer\">${content}</a>`;
   }).join('')}</div>`;
 }
 
 function renderFooter(json: LinkBioJson): string {
   const f = json.links.footer;
   const items: string[] = [];
-  if (f.termsUrl) items.push(`<a class=\"az-platform=terms\" href=${JSON.stringify(f.termsUrl)} target=\"_blank\" rel=\"noopener noreferrer\">Terms</a>`);
-  if (f.privacyUrl) items.push(`<a class=\"az-platform=privacy\" href=${JSON.stringify(f.privacyUrl)} target=\"_blank\" rel=\"noopener noreferrer\">Privacy</a>`);
+  if (f.termsUrl) items.push(`<a class=\"pf-platform=terms\" href=${JSON.stringify(f.termsUrl)} target=\"_blank\" rel=\"noopener noreferrer\">Terms</a>`);
+  if (f.privacyUrl) items.push(`<a class=\"pf-platform=privacy\" href=${JSON.stringify(f.privacyUrl)} target=\"_blank\" rel=\"noopener noreferrer\">Privacy</a>`);
   const custom = (f as any)?.custom || [];
   for (const c of custom) {
     if (!c || (!c.label && !c.url)) continue;
     const label = c.label || 'Link';
-    items.push(`<a class=\"az-platform=${escapeHtml(label.toLowerCase().replace(/\s+/g, '-'))}\" href=${JSON.stringify(c.url)} target=\"_blank\" rel=\"noopener noreferrer\">${escapeHtml(label)}</a>`);
+    items.push(`<a class=\"pf-platform=${escapeHtml(label.toLowerCase().replace(/\s+/g, '-'))}\" href=${JSON.stringify(c.url)} target=\"_blank\" rel=\"noopener noreferrer\">${escapeHtml(label)}</a>`);
   }
   if (!items.length) return '';
   return `<div class=\"zt-footer\">${items.join('<span>•</span>')}</div>`;

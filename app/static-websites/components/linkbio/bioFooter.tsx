@@ -18,7 +18,7 @@ export const BioFooter: React.FC<BioFooterProps> = ({ footer }) => {
 
   if (footer?.privacyUrl) {
     elementMap.privacy = (
-      <a key="privacy" className="hover:text-slate-200 transition-colors az-platform=privacy" href={footer.privacyUrl} target="_blank" rel="noopener">
+      <a key="privacy" className="hover:text-slate-200 transition-colors pf-platform=privacy" href={footer.privacyUrl} target="_blank" rel="noopener">
         Privacy
       </a>
     );
@@ -26,7 +26,7 @@ export const BioFooter: React.FC<BioFooterProps> = ({ footer }) => {
 
   if (footer?.termsUrl) {
     elementMap.terms = (
-      <a key="terms" className="hover:text-slate-200 transition-colors az-platform=terms" href={footer.termsUrl} target="_blank" rel="noopener">
+      <a key="terms" className="hover:text-slate-200 transition-colors pf-platform=terms" href={footer.termsUrl} target="_blank" rel="noopener">
         Terms
       </a>
     );
@@ -34,7 +34,7 @@ export const BioFooter: React.FC<BioFooterProps> = ({ footer }) => {
 
   custom.forEach((c, i) => {
     elementMap[`custom-${i}`] = (
-      <a key={`custom-${i}`} className={`hover:text-slate-200 transition-colors az-platform-${(c.label || 'link').toLowerCase().replace(/\s+/g, '-')}`} href={c.url} target="_blank" rel="noopener">
+      <a key={`custom-${i}`} className={`hover:text-slate-200 transition-colors pf-platform-${(c.label || 'link').toLowerCase().replace(/\s+/g, '-')}`} href={c.url} target="_blank" rel="noopener">
         {c.label || 'Link'}
       </a>
     );

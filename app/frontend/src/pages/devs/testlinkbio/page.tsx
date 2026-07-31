@@ -86,9 +86,9 @@ function normalizeLinkBioState(remote: any): LinkBioState {
       if (prop === 'cta') {
         return obj[platform]['label'] || obj[platform]['cta'];
       }
-      // Special handling for 'az-data-platform' property
-      if (prop === 'az-data-platform' && obj[platform]['az-data-platform']) {
-        return obj[platform]['az-data-platform'];
+      // Special handling for 'pf-data-platform' property
+      if (prop === 'pf-data-platform' && obj[platform]['pf-data-platform']) {
+        return obj[platform]['pf-data-platform'];
       } else if (obj[platform][prop]) {
         return obj[platform][prop];
       }
@@ -140,7 +140,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.stores, 'steam', 'cta'),
-            'az-data-platform': extractProp(r.stores, 'steam', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.stores, 'steam', 'pf-data-platform'),
             dataLabel: extractProp(r.stores, 'steam', 'dataLabel'),
             className: extractProp(r.stores, 'steam', 'className'),
           };
@@ -158,7 +158,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.stores, 'epic', 'cta'),
-            'az-data-platform': extractProp(r.stores, 'epic', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.stores, 'epic', 'pf-data-platform'),
             dataLabel: extractProp(r.stores, 'epic', 'dataLabel'),
             className: extractProp(r.stores, 'epic', 'className'),
           };
@@ -168,8 +168,8 @@ function normalizeLinkBioState(remote: any): LinkBioState {
       // Keep legacy flat fields for backward compatibility
       epicCta: extractProp(r.stores, 'epic', 'cta') || safe(r.stores?.epicCta, initialState.stores.epicCta),
       steamCta: extractProp(r.stores, 'steam', 'cta') || safe(r.stores?.steamCta, (initialState as any).stores?.steamCta),
-      steamId: extractProp(r.stores, 'steam', 'az-data-platform') || safe(r.stores?.steamId, (initialState as any).stores?.steamId),
-      epicId: extractProp(r.stores, 'epic', 'az-data-platform') || safe(r.stores?.epicId, (initialState as any).stores?.epicId),
+      steamId: extractProp(r.stores, 'steam', 'pf-data-platform') || safe(r.stores?.steamId, (initialState as any).stores?.steamId),
+      epicId: extractProp(r.stores, 'epic', 'pf-data-platform') || safe(r.stores?.epicId, (initialState as any).stores?.epicId),
       steamLabel: extractProp(r.stores, 'steam', 'dataLabel') || safe(r.stores?.steamLabel, (initialState as any).stores?.steamLabel),
       epicLabel: extractProp(r.stores, 'epic', 'dataLabel') || safe(r.stores?.epicLabel, (initialState as any).stores?.epicLabel),
       steamClassName: extractProp(r.stores, 'steam', 'className') || safe(r.stores?.steamClassName, (initialState as any).stores?.steamClassName),
@@ -189,7 +189,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.consoles, 'playstation', 'cta'),
-            'az-data-platform': extractProp(r.consoles, 'playstation', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.consoles, 'playstation', 'pf-data-platform'),
             dataLabel: extractProp(r.consoles, 'playstation', 'dataLabel'),
             className: extractProp(r.consoles, 'playstation', 'className'),
           };
@@ -206,7 +206,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.consoles, 'xbox', 'cta'),
-            'az-data-platform': extractProp(r.consoles, 'xbox', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.consoles, 'xbox', 'pf-data-platform'),
             dataLabel: extractProp(r.consoles, 'xbox', 'dataLabel'),
             className: extractProp(r.consoles, 'xbox', 'className'),
           };
@@ -223,7 +223,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.consoles, 'switch', 'cta'),
-            'az-data-platform': extractProp(r.consoles, 'switch', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.consoles, 'switch', 'pf-data-platform'),
             dataLabel: extractProp(r.consoles, 'switch', 'dataLabel'),
             className: extractProp(r.consoles, 'switch', 'className'),
           };
@@ -234,9 +234,9 @@ function normalizeLinkBioState(remote: any): LinkBioState {
       playstationCta: extractProp(r.consoles, 'playstation', 'cta') || safe(r.consoles?.playstationCta, (initialState as any).consoles?.playstationCta),
       xboxCta: extractProp(r.consoles, 'xbox', 'cta') || safe(r.consoles?.xboxCta, (initialState as any).consoles?.xboxCta),
       switchCta: extractProp(r.consoles, 'switch', 'cta') || safe(r.consoles?.switchCta, (initialState as any).consoles?.switchCta),
-      playstationId: extractProp(r.consoles, 'playstation', 'az-data-platform') || safe(r.consoles?.playstationId, (initialState as any).consoles?.playstationId),
-      xboxId: extractProp(r.consoles, 'xbox', 'az-data-platform') || safe(r.consoles?.xboxId, (initialState as any).consoles?.xboxId),
-      switchId: extractProp(r.consoles, 'switch', 'az-data-platform') || safe(r.consoles?.switchId, (initialState as any).consoles?.switchId),
+      playstationId: extractProp(r.consoles, 'playstation', 'pf-data-platform') || safe(r.consoles?.playstationId, (initialState as any).consoles?.playstationId),
+      xboxId: extractProp(r.consoles, 'xbox', 'pf-data-platform') || safe(r.consoles?.xboxId, (initialState as any).consoles?.xboxId),
+      switchId: extractProp(r.consoles, 'switch', 'pf-data-platform') || safe(r.consoles?.switchId, (initialState as any).consoles?.switchId),
       playstationLabel: extractProp(r.consoles, 'playstation', 'dataLabel') || safe(r.consoles?.playstationLabel, (initialState as any).consoles?.playstationLabel),
       xboxLabel: extractProp(r.consoles, 'xbox', 'dataLabel') || safe(r.consoles?.xboxLabel, (initialState as any).consoles?.xboxLabel),
       switchLabel: extractProp(r.consoles, 'switch', 'dataLabel') || safe(r.consoles?.switchLabel, (initialState as any).consoles?.switchLabel),
@@ -258,7 +258,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.mobile, 'ios', 'cta'),
-            'az-data-platform': extractProp(r.mobile, 'ios', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.mobile, 'ios', 'pf-data-platform'),
             dataLabel: extractProp(r.mobile, 'ios', 'dataLabel'),
             className: extractProp(r.mobile, 'ios', 'className'),
           };
@@ -275,7 +275,7 @@ function normalizeLinkBioState(remote: any): LinkBioState {
           return {
             url,
             label: extractProp(r.mobile, 'android', 'cta'),
-            'az-data-platform': extractProp(r.mobile, 'android', 'az-data-platform'),
+            'pf-data-platform': extractProp(r.mobile, 'android', 'pf-data-platform'),
             dataLabel: extractProp(r.mobile, 'android', 'dataLabel'),
             className: extractProp(r.mobile, 'android', 'className'),
           };
@@ -285,8 +285,8 @@ function normalizeLinkBioState(remote: any): LinkBioState {
       // Keep legacy flat fields for backward compatibility
       iosCta: extractProp(r.mobile, 'ios', 'cta') || safe(r.mobile?.iosCta, (initialState as any).mobile?.iosCta),
       androidCta: extractProp(r.mobile, 'android', 'cta') || safe(r.mobile?.androidCta, (initialState as any).mobile?.androidCta),
-      iosId: extractProp(r.mobile, 'ios', 'az-data-platform') || safe(r.mobile?.iosId, (initialState as any).mobile?.iosId),
-      androidId: extractProp(r.mobile, 'android', 'az-data-platform') || safe(r.mobile?.androidId, (initialState as any).mobile?.androidId),
+      iosId: extractProp(r.mobile, 'ios', 'pf-data-platform') || safe(r.mobile?.iosId, (initialState as any).mobile?.iosId),
+      androidId: extractProp(r.mobile, 'android', 'pf-data-platform') || safe(r.mobile?.androidId, (initialState as any).mobile?.androidId),
       iosLabel: extractProp(r.mobile, 'ios', 'dataLabel') || safe(r.mobile?.iosLabel, (initialState as any).mobile?.iosLabel),
       androidLabel: extractProp(r.mobile, 'android', 'dataLabel') || safe(r.mobile?.androidLabel, (initialState as any).mobile?.androidLabel),
       iosClassName: extractProp(r.mobile, 'ios', 'className') || safe(r.mobile?.iosClassName, (initialState as any).mobile?.iosClassName),
@@ -472,8 +472,8 @@ const LinkBioPage: React.FC = () => {
       let flatKey: string;
       if (prop === 'cta') {
         flatKey = `${platform}Cta`;
-      } else if (prop === 'az-data-platform') {
-        flatKey = `${platform}Id`; // Flat format stores az-data-platform as {platform}Id
+      } else if (prop === 'pf-data-platform') {
+        flatKey = `${platform}Id`; // Flat format stores pf-data-platform as {platform}Id
       } else if (prop === 'dataLabel') {
         flatKey = `${platform}Label`;
       } else if (prop === 'className') {
@@ -495,7 +495,7 @@ const LinkBioPage: React.FC = () => {
     ['ios', 'android'].forEach(platform => {
       const url = extractUrl(mobileSrc[platform]);
       const cta = extractProp(mobileSrc, platform, 'cta');
-      const azDataPlatform = extractProp(mobileSrc, platform, 'az-data-platform');
+      const pfDataPlatform = extractProp(mobileSrc, platform, 'pf-data-platform');
       const dataLabel = extractProp(mobileSrc, platform, 'dataLabel');
       const className = extractProp(mobileSrc, platform, 'className');
 
@@ -503,7 +503,7 @@ const LinkBioPage: React.FC = () => {
       if (url) {
         const platformObj: any = { url };
         if (cta) platformObj.label = cta; // Changed from 'cta' to 'label' for consistency
-        platformObj['az-data-platform'] = azDataPlatform || platform;
+        platformObj['pf-data-platform'] = pfDataPlatform || platform;
         if (dataLabel) platformObj.dataLabel = dataLabel;
         if (className) platformObj.className = className;
         mobileOrdered[platform] = platformObj;
@@ -520,7 +520,7 @@ const LinkBioPage: React.FC = () => {
     ['steam', 'epic'].forEach(platform => {
       const url = extractUrl(storesSrc[platform]);
       const cta = extractProp(storesSrc, platform, 'cta');
-      const azDataPlatform = extractProp(storesSrc, platform, 'az-data-platform');
+      const pfDataPlatform = extractProp(storesSrc, platform, 'pf-data-platform');
       const dataLabel = extractProp(storesSrc, platform, 'dataLabel');
       const className = extractProp(storesSrc, platform, 'className');
 
@@ -528,7 +528,7 @@ const LinkBioPage: React.FC = () => {
       if (url) {
         const platformObj: any = { url };
         if (cta) platformObj.label = cta; // Changed from 'cta' to 'label' for consistency
-        platformObj['az-data-platform'] = azDataPlatform || platform;
+        platformObj['pf-data-platform'] = pfDataPlatform || platform;
         if (dataLabel) platformObj.dataLabel = dataLabel;
         if (className) platformObj.className = className;
         storesOrdered[platform] = platformObj;
@@ -546,7 +546,7 @@ const LinkBioPage: React.FC = () => {
     ['playstation', 'xbox', 'switch'].forEach(platform => {
       const url = extractUrl(consolesSrc[platform]);
       const cta = extractProp(consolesSrc, platform, 'cta');
-      const azDataPlatform = extractProp(consolesSrc, platform, 'az-data-platform');
+      const pfDataPlatform = extractProp(consolesSrc, platform, 'pf-data-platform');
       const dataLabel = extractProp(consolesSrc, platform, 'dataLabel');
       const className = extractProp(consolesSrc, platform, 'className');
 
@@ -554,7 +554,7 @@ const LinkBioPage: React.FC = () => {
       if (url) {
         const platformObj: any = { url };
         if (cta) platformObj.label = cta; // Changed from 'cta' to 'label' for consistency
-        platformObj['az-data-platform'] = azDataPlatform || platform;
+        platformObj['pf-data-platform'] = pfDataPlatform || platform;
         if (dataLabel) platformObj.dataLabel = dataLabel;
         if (className) platformObj.className = className;
         consolesOrdered[platform] = platformObj;

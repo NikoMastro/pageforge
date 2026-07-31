@@ -34,7 +34,7 @@ export interface LinkBioLinkItem {
   url: string;
   label?: string; // Preferred for consistency with custom links
   cta?: string;   // Legacy support, fallback to label
-  'az-data-platform'?: string;
+  'pf-data-platform'?: string;
   dataLabel?: string;
   className?: string;
   logoUrl?: string;
@@ -108,7 +108,7 @@ const renderStoreLinks = (stores: LinkBioStoresConfig) => {
         key="steam"
         href={stores.steam.url}
         platform="steam"
-        az-data-platform={stores.steam['az-data-platform']}
+        pf-data-platform={stores.steam['pf-data-platform']}
         dataLabel={stores.steam.dataLabel}
         className={stores.steam.className}
       >
@@ -123,7 +123,7 @@ const renderStoreLinks = (stores: LinkBioStoresConfig) => {
         key="epic"
         href={stores.epic.url}
         platform="epic"
-        az-data-platform={stores.epic['az-data-platform']}
+        pf-data-platform={stores.epic['pf-data-platform']}
         dataLabel={stores.epic.dataLabel}
         className={stores.epic.className}
       >
@@ -137,7 +137,7 @@ const renderStoreLinks = (stores: LinkBioStoresConfig) => {
       <LinkButton
         key={`store-custom-${idx}`}
         href={s.url}
-        az-data-platform={s['az-data-platform']}
+        pf-data-platform={s['pf-data-platform']}
         dataLabel={s.dataLabel}
         className={s.className}
         logoUrl={s.logoUrl}
@@ -182,7 +182,7 @@ const renderConsoleLinks = (consoles: LinkBioConsoleConfig) => {
         key="playstation"
         href={consoles.playstation.url}
         platform="playstation"
-        az-data-platform={consoles.playstation['az-data-platform']}
+        pf-data-platform={consoles.playstation['pf-data-platform']}
         dataLabel={consoles.playstation.dataLabel}
         className={consoles.playstation.className}
       >
@@ -197,7 +197,7 @@ const renderConsoleLinks = (consoles: LinkBioConsoleConfig) => {
         key="xbox"
         href={consoles.xbox.url}
         platform="xbox"
-        az-data-platform={consoles.xbox['az-data-platform']}
+        pf-data-platform={consoles.xbox['pf-data-platform']}
         dataLabel={consoles.xbox.dataLabel}
         className={consoles.xbox.className}
       >
@@ -212,7 +212,7 @@ const renderConsoleLinks = (consoles: LinkBioConsoleConfig) => {
         key="switch"
         href={consoles.switch.url}
         platform="switch"
-        az-data-platform={consoles.switch['az-data-platform']}
+        pf-data-platform={consoles.switch['pf-data-platform']}
         dataLabel={consoles.switch.dataLabel}
         className={consoles.switch.className}
       >
@@ -226,7 +226,7 @@ const renderConsoleLinks = (consoles: LinkBioConsoleConfig) => {
       <LinkButton
         key={`console-custom-${idx}`}
         href={c.url}
-        az-data-platform={c['az-data-platform']}
+        pf-data-platform={c['pf-data-platform']}
         dataLabel={c.dataLabel}
         className={c.className}
         logoUrl={c.logoUrl}
@@ -268,7 +268,7 @@ const renderMobileLinks = (mobile: LinkBioMobileConfig) => {
         key="ios"
         href={mobile.ios.url}
         platform="ios"
-        az-data-platform={mobile.ios['az-data-platform']}
+        pf-data-platform={mobile.ios['pf-data-platform']}
         dataLabel={mobile.ios.dataLabel}
         className={mobile.ios.className}
       >
@@ -283,7 +283,7 @@ const renderMobileLinks = (mobile: LinkBioMobileConfig) => {
         key="android"
         href={mobile.android.url}
         platform="android"
-        az-data-platform={mobile.android['az-data-platform']}
+        pf-data-platform={mobile.android['pf-data-platform']}
         dataLabel={mobile.android.dataLabel}
         className={mobile.android.className}
       >

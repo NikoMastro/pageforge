@@ -34,7 +34,7 @@ export interface LinkBioLinkItem {
   url: string;
   label?: string; // Preferred for consistency with custom links
   cta?: string;   // Legacy support, fallback to label
-  'az-data-platform'?: string;
+  'pf-data-platform'?: string;
   dataLabel?: string;
   className?: string;
   logoUrl?: string;
@@ -181,7 +181,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         steam: (state.stores.steam || (state as any).stores?.steam?.url) ? {
           url: (state as any).stores?.steam?.url || state.stores.steam,
           cta: (state as any).stores?.steam?.cta || (state as any).stores?.steamCta,
-          'az-data-platform': (state as any).stores?.steam?.['az-data-platform'] || (state as any).stores?.steamId,
+          'pf-data-platform': (state as any).stores?.steam?.['pf-data-platform'] || (state as any).stores?.steamId,
           dataLabel: (state as any).stores?.steam?.dataLabel || (state as any).stores?.steamLabel,
           className: (state as any).stores?.steam?.className || (state as any).stores?.steamClassName,
           logoUrl: (state as any).stores?.steam?.logoUrl
@@ -189,7 +189,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         epic: (state.stores.epic || (state as any).stores?.epic?.url) ? {
           url: (state as any).stores?.epic?.url || state.stores.epic,
           cta: (state as any).stores?.epic?.cta || (state as any).stores?.epicCta || state.stores.epicCta,
-          'az-data-platform': (state as any).stores?.epic?.['az-data-platform'] || (state as any).stores?.epicId,
+          'pf-data-platform': (state as any).stores?.epic?.['pf-data-platform'] || (state as any).stores?.epicId,
           dataLabel: (state as any).stores?.epic?.dataLabel || (state as any).stores?.epicLabel,
           className: (state as any).stores?.epic?.className || (state as any).stores?.epicClassName,
           logoUrl: (state as any).stores?.epic?.logoUrl
@@ -201,7 +201,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         playstation: (state.consoles.playstation || (state as any).consoles?.playstation?.url) ? {
           url: (state as any).consoles?.playstation?.url || state.consoles.playstation,
           cta: (state as any).consoles?.playstation?.cta || (state as any).consoles?.playstationCta,
-          'az-data-platform': (state as any).consoles?.playstation?.['az-data-platform'] || (state as any).consoles?.playstationId,
+          'pf-data-platform': (state as any).consoles?.playstation?.['pf-data-platform'] || (state as any).consoles?.playstationId,
           dataLabel: (state as any).consoles?.playstation?.dataLabel || (state as any).consoles?.playstationLabel,
           className: (state as any).consoles?.playstation?.className || (state as any).consoles?.playstationClassName,
           logoUrl: (state as any).consoles?.playstation?.logoUrl
@@ -209,7 +209,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         xbox: (state.consoles.xbox || (state as any).consoles?.xbox?.url) ? {
           url: (state as any).consoles?.xbox?.url || state.consoles.xbox,
           cta: (state as any).consoles?.xbox?.cta || (state as any).consoles?.xboxCta,
-          'az-data-platform': (state as any).consoles?.xbox?.['az-data-platform'] || (state as any).consoles?.xboxId,
+          'pf-data-platform': (state as any).consoles?.xbox?.['pf-data-platform'] || (state as any).consoles?.xboxId,
           dataLabel: (state as any).consoles?.xbox?.dataLabel || (state as any).consoles?.xboxLabel,
           className: (state as any).consoles?.xbox?.className || (state as any).consoles?.xboxClassName,
           logoUrl: (state as any).consoles?.xbox?.logoUrl
@@ -217,7 +217,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         switch: (state.consoles.switch || (state as any).consoles?.switch?.url) ? {
           url: (state as any).consoles?.switch?.url || state.consoles.switch,
           cta: (state as any).consoles?.switch?.cta || (state as any).consoles?.switchCta,
-          'az-data-platform': (state as any).consoles?.switch?.['az-data-platform'] || (state as any).consoles?.switchId,
+          'pf-data-platform': (state as any).consoles?.switch?.['pf-data-platform'] || (state as any).consoles?.switchId,
           dataLabel: (state as any).consoles?.switch?.dataLabel || (state as any).consoles?.switchLabel,
           className: (state as any).consoles?.switch?.className || (state as any).consoles?.switchClassName,
           logoUrl: (state as any).consoles?.switch?.logoUrl
@@ -229,7 +229,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         ios: (state.mobile.ios || (state as any).mobile?.ios?.url) ? {
           url: (state as any).mobile?.ios?.url || state.mobile.ios,
           cta: (state as any).mobile?.ios?.cta || (state as any).mobile?.iosCta,
-          'az-data-platform': (state as any).mobile?.ios?.['az-data-platform'] || (state as any).mobile?.iosId,
+          'pf-data-platform': (state as any).mobile?.ios?.['pf-data-platform'] || (state as any).mobile?.iosId,
           dataLabel: (state as any).mobile?.ios?.dataLabel || (state as any).mobile?.iosLabel,
           className: (state as any).mobile?.ios?.className || (state as any).mobile?.iosClassName,
           logoUrl: (state as any).mobile?.ios?.logoUrl
@@ -237,7 +237,7 @@ export function generateLinkBioJson(opts: GenerateLinkBioJsonOptions): LinkBioJs
         android: (state.mobile.android || (state as any).mobile?.android?.url) ? {
           url: (state as any).mobile?.android?.url || state.mobile.android,
           cta: (state as any).mobile?.android?.cta || (state as any).mobile?.androidCta,
-          'az-data-platform': (state as any).mobile?.android?.['az-data-platform'] || (state as any).mobile?.androidId,
+          'pf-data-platform': (state as any).mobile?.android?.['pf-data-platform'] || (state as any).mobile?.androidId,
           dataLabel: (state as any).mobile?.android?.dataLabel || (state as any).mobile?.androidLabel,
           className: (state as any).mobile?.android?.className || (state as any).mobile?.androidClassName,
           logoUrl: (state as any).mobile?.android?.logoUrl

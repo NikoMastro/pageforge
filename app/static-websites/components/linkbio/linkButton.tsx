@@ -4,7 +4,7 @@ interface LinkButtonProps {
   href: string;
   children: React.ReactNode;
   platform?: 'steam' | 'epic' | 'playstation' | 'xbox' | 'switch' | 'ios' | 'android' | 'x' | 'discord' | 'instagram' | 'youtube';
-  'az-data-platform'?: string;
+  'pf-data-platform'?: string;
   dataLabel?: string;
   className?: string;
   logoUrl?: string;
@@ -116,7 +116,7 @@ const ShareIcon: React.FC = () => (
   </svg>
 );
 
-export const LinkButton: React.FC<LinkButtonProps> = ({ href, children, platform, 'az-data-platform': azDataPlatform, dataLabel, className, logoUrl }) => {
+export const LinkButton: React.FC<LinkButtonProps> = ({ href, children, platform, 'pf-data-platform': pfDataPlatform, dataLabel, className, logoUrl }) => {
   const handleShare = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -132,12 +132,12 @@ export const LinkButton: React.FC<LinkButtonProps> = ({ href, children, platform
     }
   };
 
-  const baseClassName = `group flex items-center justify-between w-full rounded-2xl px-4 py-3 font-medium bg-slate-800/70 hover:bg-slate-700 transition-colors text-slate-100 text-sm shadow-sm border border-slate-700/50 hover:border-slate-600/50 az-platform=${platform ?? 'custom'} cursor-pointer`;
+  const baseClassName = `group flex items-center justify-between w-full rounded-2xl px-4 py-3 font-medium bg-slate-800/70 hover:bg-slate-700 transition-colors text-slate-100 text-sm shadow-sm border border-slate-700/50 hover:border-slate-600/50 pf-platform=${platform ?? 'custom'} cursor-pointer`;
   const finalClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
   return (
     <div
-      data-az-platform={azDataPlatform}
+      data-pf-platform={pfDataPlatform}
       data-label={dataLabel}
       className={finalClassName}
       data-href={href}

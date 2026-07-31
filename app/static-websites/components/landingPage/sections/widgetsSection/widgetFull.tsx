@@ -29,7 +29,7 @@ const WidgetFull: React.FC<WidgetFullProps> = ({
   const steamWidgetUrl = buildSteamWidgetUrl(gameId, null, utm);
 
   return (
-    <div className={`steam-widget-container ${className}`} data-az-platform="az-steam-desktop">
+    <div className={`steam-widget-container ${className}`} data-pf-platform="pf-steam-desktop">
       <iframe
         src={steamWidgetUrl}
         frameBorder="0"

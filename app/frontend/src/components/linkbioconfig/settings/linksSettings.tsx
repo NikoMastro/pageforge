@@ -6,7 +6,7 @@ export interface LinkBioLinkItem {
   url: string;
   label?: string; // Preferred for consistency with custom links
   cta?: string;   // Legacy support, fallback to label
-  'az-data-platform'?: string;
+  'pf-data-platform'?: string;
   dataLabel?: string;
   className?: string;
   logoUrl?: string;
@@ -37,12 +37,12 @@ const LinksSettings: React.FC<LinkBioLinksSettingsProps> = ({ value, onChange })
   const [expandedCustom, setExpandedCustom] = React.useState<Record<number, boolean>>({});
 
   const custom = value.custom || [];
-  const updateCustom = (idx: number, patch: Partial<{ label: string; url: string; logoUrl?: string; 'az-data-platform'?: string; dataLabel?: string; className?: string }>) => {
+  const updateCustom = (idx: number, patch: Partial<{ label: string; url: string; logoUrl?: string; 'pf-data-platform'?: string; dataLabel?: string; className?: string }>) => {
     const next = [...custom];
     next[idx] = { ...next[idx], ...patch } as any;
     onChange({ custom: next });
   };
-  const addCustom = () => onChange({ custom: [...custom, { label: '', url: '', logoUrl: '', 'az-data-platform': '', dataLabel: '', className: '' }] });
+  const addCustom = () => onChange({ custom: [...custom, { label: '', url: '', logoUrl: '', 'pf-data-platform': '', dataLabel: '', className: '' }] });
   const removeCustom = (idx: number) => {
     onChange({ custom: custom.filter((_, i) => i !== idx) });
     // Clean up expanded state for removed item
@@ -52,17 +52,17 @@ const LinksSettings: React.FC<LinkBioLinksSettingsProps> = ({ value, onChange })
   };
 
   // Helper function to normalize platform data (handle both string and object formats)
-  const normalizePlatform = (val: string | LinkBioLinkItem | undefined): { url: string; cta: string; 'az-data-platform': string; dataLabel: string; className: string } => {
+  const normalizePlatform = (val: string | LinkBioLinkItem | undefined): { url: string; cta: string; 'pf-data-platform': string; dataLabel: string; className: string } => {
     if (!val) {
-      return { url: '', cta: '', 'az-data-platform': '', dataLabel: '', className: '' };
+      return { url: '', cta: '', 'pf-data-platform': '', dataLabel: '', className: '' };
     }
     if (typeof val === 'string') {
-      return { url: val, cta: '', 'az-data-platform': '', dataLabel: '', className: '' };
+      return { url: val, cta: '', 'pf-data-platform': '', dataLabel: '', className: '' };
     }
     return {
       url: val.url || '',
       cta: val.label || val.cta || '', // Check 'label' first (new format), then 'cta' (legacy)
-      'az-data-platform': val['az-data-platform'] || '',
+      'pf-data-platform': val['pf-data-platform'] || '',
       dataLabel: val.dataLabel || '',
       className: val.className || ''
     };
@@ -80,13 +80,13 @@ const LinksSettings: React.FC<LinkBioLinksSettingsProps> = ({ value, onChange })
   // Normalize platform data
   const steamData = normalizePlatform(value.steam);
   steamData.cta = getCta(value.steam, value.steamCta);
-  steamData['az-data-platform'] = value.steamId || steamData['az-data-platform'];
+  steamData['pf-data-platform'] = value.steamId || steamData['pf-data-platform'];
   steamData.dataLabel = value.steamLabel || steamData.dataLabel;
   steamData.className = value.steamClassName || steamData.className;
 
   const epicData = normalizePlatform(value.epic);
   epicData.cta = getCta(value.epic, value.epicCta);
-  epicData['az-data-platform'] = value.epicId || epicData['az-data-platform'];
+  epicData['pf-data-platform'] = value.epicId || epicData['pf-data-platform'];
   epicData.dataLabel = value.epicLabel || epicData.dataLabel;
   epicData.className = value.epicClassName || epicData.className;
 
@@ -133,7 +133,7 @@ const LinksSettings: React.FC<LinkBioLinksSettingsProps> = ({ value, onChange })
     const updates: any = {};
     updates[platformKey] = updated.url || undefined;
     updates[`${platformKey}Cta`] = updated.cta || undefined;
-    updates[`${platformKey}Id`] = updated['az-data-platform'] || undefined;
+    updates[`${platformKey}Id`] = updated['pf-data-platform'] || undefined;
     updates[`${platformKey}Label`] = updated.dataLabel || undefined;
     updates[`${platformKey}ClassName`] = updated.className || undefined;
 
@@ -214,12 +214,12 @@ const LinksSettings: React.FC<LinkBioLinksSettingsProps> = ({ value, onChange })
               {showAdvanced && (
                 <div className="mt-3 pt-3 border-t border-gray-600 grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400">az-data-platform</label>
+                    <label className="block text-xs font-medium text-gray-400">pf-data-platform</label>
                     <input
                       type="text"
-                      value={item.data['az-data-platform']}
-                      onChange={e => updatePlatform(item.key as 'steam' | 'epic', { 'az-data-platform': e.target.value })}
-                      placeholder="e.g. az-steam-app"
+                      value={item.data['pf-data-platform']}
+                      onChange={e => updatePlatform(item.key as 'steam' | 'epic', { 'pf-data-platform': e.target.value })}
+                      placeholder="e.g. pf-steam-app"
                       className="mt-1 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-gray-200 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
@@ -340,12 +340,12 @@ const LinksSettings: React.FC<LinkBioLinksSettingsProps> = ({ value, onChange })
                     {showAdvanced && (
                       <div className="pt-3 border-t border-gray-600 grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-400">az-data-platform</label>
+                          <label className="block text-xs font-medium text-gray-400">pf-data-platform</label>
                           <input
                             type="text"
-                            value={(item as any)['az-data-platform'] || ''}
-                            onChange={e => updateCustom(idx, { 'az-data-platform': e.target.value })}
-                            placeholder="e.g. az-custom-store"
+                            value={(item as any)['pf-data-platform'] || ''}
+                            onChange={e => updateCustom(idx, { 'pf-data-platform': e.target.value })}
+                            placeholder="e.g. pf-custom-store"
                             className="mt-1 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-gray-200 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>

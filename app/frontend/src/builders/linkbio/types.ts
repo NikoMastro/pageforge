@@ -37,7 +37,7 @@ export interface LinkBioLinkItem {
   url: string;
   label?: string;
   cta?: string;
-  'az-data-platform'?: string;
+  'pf-data-platform'?: string;
   dataLabel?: string;
   className?: string;
   logoUrl?: string;

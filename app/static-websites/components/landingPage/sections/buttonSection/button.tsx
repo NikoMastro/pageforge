@@ -205,7 +205,7 @@ const Button: React.FC<ButtonProps & { layout?: 'desktop' | 'phone' }> = ({
           className={`custom-button ${className}`}
           style={customStyles}
           disabled={disabled}
-          data-az-platform="az-steam-desktop"
+          data-pf-platform="pf-steam-desktop"
         >
           {/* Custom image */}
           {image?.display && image?.src && (

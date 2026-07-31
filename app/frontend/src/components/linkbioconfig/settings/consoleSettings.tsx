@@ -21,7 +21,7 @@ export interface LinkBioConsoleSettingsValue {
   playstationClassName?: string;
   xboxClassName?: string;
   switchClassName?: string;
-  custom?: Array<{ label: string; url: string; logoUrl?: string; 'az-data-platform'?: string; dataLabel?: string; className?: string }>;
+  custom?: Array<{ label: string; url: string; logoUrl?: string; 'pf-data-platform'?: string; dataLabel?: string; className?: string }>;
   order?: string[]; // Array of console names defining order: ['playstation', 'xbox', 'switch', 'custom']
 }
 export interface LinkBioConsoleSettingsProps {
@@ -35,12 +35,12 @@ const ConsoleSettings: React.FC<LinkBioConsoleSettingsProps> = ({ value, onChang
   const [expandedCustom, setExpandedCustom] = React.useState<Record<number, boolean>>({});
 
   const custom = value.custom || [];
-  const updateCustom = (idx: number, patch: Partial<{ label: string; url: string; logoUrl?: string; 'az-data-platform'?: string; dataLabel?: string; className?: string }>) => {
+  const updateCustom = (idx: number, patch: Partial<{ label: string; url: string; logoUrl?: string; 'pf-data-platform'?: string; dataLabel?: string; className?: string }>) => {
     const next = [...custom];
     next[idx] = { ...next[idx], ...patch } as any;
     onChange({ custom: next });
   };
-  const addCustom = () => onChange({ custom: [...custom, { label: '', url: '', logoUrl: '', 'az-data-platform': '', dataLabel: '', className: '' }] });
+  const addCustom = () => onChange({ custom: [...custom, { label: '', url: '', logoUrl: '', 'pf-data-platform': '', dataLabel: '', className: '' }] });
   const removeCustom = (idx: number) => {
     onChange({ custom: custom.filter((_, i) => i !== idx) });
     // Clean up expanded state for removed item
@@ -50,17 +50,17 @@ const ConsoleSettings: React.FC<LinkBioConsoleSettingsProps> = ({ value, onChang
   };
 
   // Helper function to normalize platform data (handle both string and object formats)
-  const normalizePlatform = (val: string | LinkBioLinkItem | undefined): { url: string; cta: string; 'az-data-platform': string; dataLabel: string; className: string } => {
+  const normalizePlatform = (val: string | LinkBioLinkItem | undefined): { url: string; cta: string; 'pf-data-platform': string; dataLabel: string; className: string } => {
     if (!val) {
-      return { url: '', cta: '', 'az-data-platform': '', dataLabel: '', className: '' };
+      return { url: '', cta: '', 'pf-data-platform': '', dataLabel: '', className: '' };
     }
     if (typeof val === 'string') {
-      return { url: val, cta: '', 'az-data-platform': '', dataLabel: '', className: '' };
+      return { url: val, cta: '', 'pf-data-platform': '', dataLabel: '', className: '' };
     }
     return {
       url: val.url || '',
       cta: val.label || val.cta || '', // Check 'label' first (new format), then 'cta' (legacy)
-      'az-data-platform': val['az-data-platform'] || '',
+      'pf-data-platform': val['pf-data-platform'] || '',
       dataLabel: val.dataLabel || '',
       className: val.className || ''
     };
@@ -78,19 +78,19 @@ const ConsoleSettings: React.FC<LinkBioConsoleSettingsProps> = ({ value, onChang
   // Normalize platform data
   const playstationData = normalizePlatform(value.playstation);
   playstationData.cta = getCta(value.playstation, value.playstationCta);
-  playstationData['az-data-platform'] = value.playstationId || playstationData['az-data-platform'];
+  playstationData['pf-data-platform'] = value.playstationId || playstationData['pf-data-platform'];
   playstationData.dataLabel = value.playstationLabel || playstationData.dataLabel;
   playstationData.className = value.playstationClassName || playstationData.className;
 
   const xboxData = normalizePlatform(value.xbox);
   xboxData.cta = getCta(value.xbox, value.xboxCta);
-  xboxData['az-data-platform'] = value.xboxId || xboxData['az-data-platform'];
+  xboxData['pf-data-platform'] = value.xboxId || xboxData['pf-data-platform'];
   xboxData.dataLabel = value.xboxLabel || xboxData.dataLabel;
   xboxData.className = value.xboxClassName || xboxData.className;
 
   const switchData = normalizePlatform(value.switch);
   switchData.cta = getCta(value.switch, value.switchCta);
-  switchData['az-data-platform'] = value.switchId || switchData['az-data-platform'];
+  switchData['pf-data-platform'] = value.switchId || switchData['pf-data-platform'];
   switchData.dataLabel = value.switchLabel || switchData.dataLabel;
   switchData.className = value.switchClassName || switchData.className;
 
@@ -145,7 +145,7 @@ const ConsoleSettings: React.FC<LinkBioConsoleSettingsProps> = ({ value, onChang
     const updates: any = {};
     updates[platformKey] = updated.url || undefined;
     updates[`${platformKey}Cta`] = updated.cta || undefined;
-    updates[`${platformKey}Id`] = updated['az-data-platform'] || undefined;
+    updates[`${platformKey}Id`] = updated['pf-data-platform'] || undefined;
     updates[`${platformKey}Label`] = updated.dataLabel || undefined;
     updates[`${platformKey}ClassName`] = updated.className || undefined;
 
@@ -226,12 +226,12 @@ const ConsoleSettings: React.FC<LinkBioConsoleSettingsProps> = ({ value, onChang
               {showAdvanced && (
                 <div className="mt-3 pt-3 border-t border-gray-600 grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400">az-data-platform</label>
+                    <label className="block text-xs font-medium text-gray-400">pf-data-platform</label>
                     <input
                       type="text"
-                      value={item.data['az-data-platform']}
-                      onChange={e => updatePlatform(item.key as 'playstation' | 'xbox' | 'switch', { 'az-data-platform': e.target.value })}
-                      placeholder="e.g. az-playstation"
+                      value={item.data['pf-data-platform']}
+                      onChange={e => updatePlatform(item.key as 'playstation' | 'xbox' | 'switch', { 'pf-data-platform': e.target.value })}
+                      placeholder="e.g. pf-playstation"
                       className="mt-1 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-gray-200 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
@@ -352,12 +352,12 @@ const ConsoleSettings: React.FC<LinkBioConsoleSettingsProps> = ({ value, onChang
                     {showAdvanced && (
                       <div className="pt-3 border-t border-gray-600 grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-400">az-data-platform</label>
+                          <label className="block text-xs font-medium text-gray-400">pf-data-platform</label>
                           <input
                             type="text"
-                            value={(item as any)['az-data-platform'] || ''}
-                            onChange={e => updateCustom(idx, { 'az-data-platform': e.target.value })}
-                            placeholder="e.g. az-custom-console"
+                            value={(item as any)['pf-data-platform'] || ''}
+                            onChange={e => updateCustom(idx, { 'pf-data-platform': e.target.value })}
+                            placeholder="e.g. pf-custom-console"
                             className="mt-1 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-gray-200 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                           />
                         </div>

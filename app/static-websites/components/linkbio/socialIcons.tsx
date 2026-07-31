@@ -50,7 +50,7 @@ const SocialIcon: React.FC<{ platform: string; href: string }> = ({ platform, hr
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`p-2 rounded-lg hover:bg-slate-700/70 transition-colors hover:border-slate-600/50 az-platform=${platform}`}
+      className={`p-2 rounded-lg hover:bg-slate-700/70 transition-colors hover:border-slate-600/50 pf-platform=${platform}`}
       title={platform.charAt(0).toUpperCase() + platform.slice(1)}
     >
       {renderIcon()}
@@ -120,7 +120,7 @@ export const SocialIcons: React.FC<SocialIconsProps> = ({ socialLinks }) => {
             href={(entry as any).url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg hover:bg-slate-700/70 transition-colors hover:border-slate-600/50 az-platform=custom"
+            className="p-2 rounded-lg hover:bg-slate-700/70 transition-colors hover:border-slate-600/50 pf-platform=custom"
           >
             {(entry as any).logoUrl ? (
               <img src={(entry as any).logoUrl} alt="social" className="w-8 h-8 object-contain" />

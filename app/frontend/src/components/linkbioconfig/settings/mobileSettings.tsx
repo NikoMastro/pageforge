@@ -27,17 +27,17 @@ const MobileSettings: React.FC<LinkBioMobileSettingsProps> = ({ value, onChange 
   const [expandedPlatforms, setExpandedPlatforms] = React.useState<Record<string, boolean>>({});
 
   // Helper function to normalize platform data (handle both string and object formats)
-  const normalizePlatform = (val: string | LinkBioLinkItem | undefined): { url: string; cta: string; 'az-data-platform': string; dataLabel: string; className: string } => {
+  const normalizePlatform = (val: string | LinkBioLinkItem | undefined): { url: string; cta: string; 'pf-data-platform': string; dataLabel: string; className: string } => {
     if (!val) {
-      return { url: '', cta: '', 'az-data-platform': '', dataLabel: '', className: '' };
+      return { url: '', cta: '', 'pf-data-platform': '', dataLabel: '', className: '' };
     }
     if (typeof val === 'string') {
-      return { url: val, cta: '', 'az-data-platform': '', dataLabel: '', className: '' };
+      return { url: val, cta: '', 'pf-data-platform': '', dataLabel: '', className: '' };
     }
     return {
       url: val.url || '',
       cta: val.label || val.cta || '', // Check 'label' first (new format), then 'cta' (legacy)
-      'az-data-platform': val['az-data-platform'] || '',
+      'pf-data-platform': val['pf-data-platform'] || '',
       dataLabel: val.dataLabel || '',
       className: val.className || ''
     };
@@ -55,13 +55,13 @@ const MobileSettings: React.FC<LinkBioMobileSettingsProps> = ({ value, onChange 
   // Normalize platform data
   const iosData = normalizePlatform(value.ios);
   iosData.cta = getCta(value.ios, value.iosCta);
-  iosData['az-data-platform'] = value.iosId || iosData['az-data-platform'];
+  iosData['pf-data-platform'] = value.iosId || iosData['pf-data-platform'];
   iosData.dataLabel = value.iosLabel || iosData.dataLabel;
   iosData.className = value.iosClassName || iosData.className;
 
   const androidData = normalizePlatform(value.android);
   androidData.cta = getCta(value.android, value.androidCta);
-  androidData['az-data-platform'] = value.androidId || androidData['az-data-platform'];
+  androidData['pf-data-platform'] = value.androidId || androidData['pf-data-platform'];
   androidData.dataLabel = value.androidLabel || androidData.dataLabel;
   androidData.className = value.androidClassName || androidData.className;
 
@@ -109,7 +109,7 @@ const MobileSettings: React.FC<LinkBioMobileSettingsProps> = ({ value, onChange 
     const updates: any = {};
     updates[platformKey] = updated.url || undefined;
     updates[`${platformKey}Cta`] = updated.cta || undefined;
-    updates[`${platformKey}Id`] = updated['az-data-platform'] || undefined;
+    updates[`${platformKey}Id`] = updated['pf-data-platform'] || undefined;
     updates[`${platformKey}Label`] = updated.dataLabel || undefined;
     updates[`${platformKey}ClassName`] = updated.className || undefined;
 
@@ -190,12 +190,12 @@ const MobileSettings: React.FC<LinkBioMobileSettingsProps> = ({ value, onChange 
               {showAdvanced && (
                 <div className="mt-3 pt-3 border-t border-gray-600 grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400">az-data-platform</label>
+                    <label className="block text-xs font-medium text-gray-400">pf-data-platform</label>
                     <input
                       type="text"
-                      value={item.data['az-data-platform']}
-                      onChange={e => updatePlatform(item.key as 'ios' | 'android', { 'az-data-platform': e.target.value })}
-                      placeholder="e.g. az-steam-app"
+                      value={item.data['pf-data-platform']}
+                      onChange={e => updatePlatform(item.key as 'ios' | 'android', { 'pf-data-platform': e.target.value })}
+                      placeholder="e.g. pf-steam-app"
                       className="mt-1 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-gray-200 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
