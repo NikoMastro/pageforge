@@ -285,6 +285,93 @@ async function buildPage(page, game) {
   return { landingPageData: lp, htmlConfig, generatedHtml };
 }
 
+
+// ---------------------------------------------------------------------------
+// Demo LinkBio: a link-in-bio hub for the four demo games ("game-hub").
+// Same restrictions as landing pages apply to visitor-created LinkBios
+// (10-page cap, 1h TTL, rate limits); this seed page is admin-protected.
+// ---------------------------------------------------------------------------
+function buildLinkBioJson(now) {
+  return {
+    version: 1,
+    kind: "LinkBio",
+    id: "game-hub",
+    meta: {
+      title: "PageForge Games",
+      description: "Four indie classics, one hub — a demo LinkBio built with PageForge.",
+      slug: "game-hub",
+      createdAt: now,
+      updatedAt: now,
+    },
+    appearance: {
+      background: { type: "gradient", value: "linear-gradient(180deg, #10081e 0%, #251540 100%)" },
+      secondaryBackground: { type: "solid", value: "#1c1030" },
+      profileImageUrl: CDN("1145360", "capsule_616x353.jpg"),
+      faviconUrl: "/favicon.ico",
+      illustrationUrl: CDN("504230", "library_hero.jpg"),
+    },
+    links: {
+      stores: {
+        steam: {
+          url: "https://store.steampowered.com/app/1145360/Hades/",
+          label: "Hades",
+          cta: "Play on Steam",
+        },
+        custom: [
+          { label: "Stardew Valley", url: "https://store.steampowered.com/app/413150/Stardew_Valley/", logoUrl: CDN("413150", "capsule_231x87.jpg") },
+          { label: "Hollow Knight", url: "https://store.steampowered.com/app/367520/Hollow_Knight/", logoUrl: CDN("367520", "capsule_231x87.jpg") },
+          { label: "Celeste", url: "https://store.steampowered.com/app/504230/Celeste/", logoUrl: CDN("504230", "capsule_231x87.jpg") },
+        ],
+        order: ["steam", "custom"],
+      },
+      consoles: {},
+      mobile: {},
+      social: {
+        x: "https://x.com/steam",
+        youtube: "https://www.youtube.com/@Steam",
+        order: ["x", "youtube"],
+      },
+      footer: {
+        privacyUrl: "https://example.com/privacy",
+        termsUrl: "https://example.com/terms",
+        order: ["privacy", "terms"],
+      },
+    },
+    pixel: { enabled: false, mode: "none" },
+  };
+}
+
+async function seedLinkBio() {
+  const now = new Date().toISOString();
+  const json = buildLinkBioJson(now);
+  const hashid = crypto.createHash("sha256")
+    .update(stableStringify({ page_name: json.meta.slug, value: json }))
+    .digest("hex");
+  // Same metadata shape the builder UI sends on save
+  const metadata = {
+    page_name: json.meta.slug,
+    description: json.meta.title,
+    active: false,
+    type: "linkbio",
+    type_value: json.meta.slug,
+    value: json,
+    Timestamp: now,
+    timestamp: now,
+    lp_json: JSON.stringify(json),
+    hashid,
+    user: "demo@example.com",
+    commit: "create-linkbio: PageForge Games hub",
+  };
+  const headers = { "Content-Type": "application/json" };
+  if (process.env.ADMIN_TOKEN) headers["x-admin-token"] = process.env.ADMIN_TOKEN;
+  const res = await fetch(`${API}/linkbio/save`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ metadata }),
+  });
+  console.log(`linkbio game-hub: ${res.status}`, JSON.stringify(await res.json()));
+}
+
 async function main() {
   for (const [page, game] of Object.entries(COPY)) {
     const { landingPageData, htmlConfig, generatedHtml } = await buildPage(page, game);
@@ -310,6 +397,8 @@ async function main() {
     });
     console.log(`${page}: ${res.status}`, JSON.stringify(await res.json()));
   }
+  await seedLinkBio();
+
   const list = await fetch(`${API}/lp/all`);
   console.log("list:", JSON.stringify(await list.json()));
 }

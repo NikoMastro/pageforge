@@ -12,18 +12,24 @@
  */
 const crypto = require("crypto");
 
-const PROTECTED_PAGES = (process.env.PROTECTED_PAGES ||
-  "hades,stardew-valley,hollow-knight,celeste")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
+const csv = (value) => value.split(",").map((s) => s.trim()).filter(Boolean);
+
+const PROTECTED_PAGES = csv(
+  process.env.PROTECTED_PAGES || "hades,stardew-valley,hollow-knight,celeste"
+);
+const PROTECTED_LINKBIO = csv(process.env.PROTECTED_LINKBIO || "game-hub");
 
 // Lifetime of visitor-created documents (default 1 hour)
 const NEW_PAGE_TTL_MS = parseInt(process.env.NEW_PAGE_TTL_MS || "3600000", 10);
 
-/** Protected pages live in the landing-pages collection. */
+/** Permanent demo pages, per collection. */
+const PROTECTED_BY_COLLECTION = {
+  lps: PROTECTED_PAGES,
+  linkbio: PROTECTED_LINKBIO,
+};
+
 function isProtectedPage(collection, pageName) {
-  return collection === "lps" && PROTECTED_PAGES.includes(pageName);
+  return (PROTECTED_BY_COLLECTION[collection] || []).includes(pageName);
 }
 
 /** Constant-time comparison of the x-admin-token header with ADMIN_TOKEN. */
@@ -38,6 +44,7 @@ function isAdminRequest(req) {
 
 module.exports = {
   PROTECTED_PAGES,
+  PROTECTED_LINKBIO,
   NEW_PAGE_TTL_MS,
   isProtectedPage,
   isAdminRequest,
