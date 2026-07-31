@@ -53,9 +53,38 @@ function toApiDoc(doc) {
   };
 }
 
+// Accept only plain-string page names so client-supplied values can never
+// smuggle Mongo query operators (e.g. {"$gt": ""}) into the queries and
+// deletes that later use page_name.
+const SAFE_PAGE_NAME = /^[A-Za-z0-9 _.\-]{1,120}$/;
+
+/** Reject documents whose top-level keys could be Mongo operators. */
+function hasUnsafeKeys(data) {
+  return Object.keys(data).some((k) => k.startsWith("$") || k.includes("."));
+}
+
 // Same contract as firestoreutils/savetoFirestore.js
 async function SavetoFirestore(data, collection) {
   try {
+    if (data === null || typeof data !== "object" || Array.isArray(data)) {
+      return { status: 400, error: "Invalid payload", message: "Invalid payload" };
+    }
+    if (hasUnsafeKeys(data)) {
+      return {
+        status: 400,
+        error: "Invalid field names",
+        message: "Field names must not start with '$' or contain '.'",
+      };
+    }
+    if (data.page_name !== undefined && (typeof data.page_name !== "string" || !SAFE_PAGE_NAME.test(data.page_name))) {
+      return {
+        status: 400,
+        error: "Invalid page name",
+        message:
+          "page_name must be a string of letters, digits, spaces, '_', '-' or '.' (max 120 chars)",
+      };
+    }
+
     const db = await getDb();
     const col = db.collection(collection);
 
@@ -122,6 +151,9 @@ async function SavetoFirestore(data, collection) {
 async function getFromFirestore(req, collection, limit, isNotHistory = true) {
   try {
     const { name } = req.params;
+    if (typeof name !== "string") {
+      return { status: 400, data: { error: "Invalid page name" } };
+    }
     const db = await getDb();
     const docs = await db
       .collection(collection)
@@ -206,7 +238,7 @@ async function listItems(req, collection) {
 // Same contract as firestoreutils/deleteFromFirestore.js
 async function deleteByPageName(pageName, collection) {
   try {
-    if (!pageName) {
+    if (!pageName || typeof pageName !== "string") {
       return {
         status: 400,
         message: "Page name is required",
