@@ -1,0 +1,36 @@
+{
+  "public": "dist",
+  "rewrites": [
+    { "source": "**/*.js", "destination": "$1" },
+    { "source": "**/*.css", "destination": "$1" },
+    { "source": "**/*.json", "destination": "$1" },
+    { "source": "**/*.woff*", "destination": "$1" },
+    { "source": "**/*.ttf", "destination": "$1" },
+    { "source": "**/*.eot", "destination": "$1" },
+    { "source": "**/*.svg", "destination": "$1" },
+    { "source": "**/*.png", "destination": "$1" },
+    { "source": "**/*.jpg", "destination": "$1" },
+    { "source": "**/*.gif", "destination": "$1" },
+    { "source": "**", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "**/*.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "**/*.css",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

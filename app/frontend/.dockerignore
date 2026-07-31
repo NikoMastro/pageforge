@@ -1,0 +1,32 @@
+# Ignore dependencies and build outputs
+node_modules
+*/node_modules
+
+# Monorepo workspace outputs
+Flows/dist
+PageForge/dist
+dist
+build
+
+# Vite/Turbo caches
+.vite
+.turbo
+.cache
+
+# Git and local files
+.git
+.gitignore
+.env
+.env.*
+
+# Docker files (except current Dockerfile used by build)
+Dockerfile*
+docker-compose.*
+
+# Logs and editor junk
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store

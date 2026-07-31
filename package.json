@@ -1,0 +1,26 @@
+{
+  "name": "pageforge-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "app/static-websites",
+    "app/frontend",
+    "app/deployment-runtime"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @pageforge/frontend",
+    "dev:frontend": "npm run dev -w @pageforge/frontend",
+    "dev:backend": "node backend/server.js",
+    "build": "npm run build --workspaces --if-present",
+    "build:frontend": "npm run build -w @pageforge/frontend",
+    "type-check": "npm run type-check --workspaces --if-present"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^6.17.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

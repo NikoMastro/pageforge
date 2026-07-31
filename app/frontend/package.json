@@ -1,0 +1,64 @@
+{
+  "name": "@pageforge/frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "JSON page generator for client-side applications using React and Tailwind CSS.",
+  "main": "src/main.tsx",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "deploy": "tsx src/config/jsonGenerator.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pageforge/static-websites": "*",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@google-cloud/storage": "^7.12.0",
+    "@headlessui/react": "^2.2.4",
+    "@heroicons/react": "^2.2.0",
+    "@monaco-editor/react": "^4.7.0",
+    "firebase": "^12.1.0",
+    "firebase-admin": "^12.6.0",
+    "fs-extra": "^11.3.0",
+    "hls.js": "^1.5.15",
+    "dashjs": "^4.7.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^6.30.1",
+    "uuid": "^11.0.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/firebase": "^2.4.32",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.15.24",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.5",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.0",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "overrides": {
+    "rollup": "^4.47.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.47.1",
+    "@rollup/rollup-linux-x64-musl": "^4.47.1",
+    "lightningcss-linux-x64-gnu": "^1.30.1",
+    "lightningcss-linux-x64-musl": "^1.30.1"
+  }
+}

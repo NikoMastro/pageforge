@@ -1,0 +1,23 @@
+services:
+  firestore:
+    image: spine3/firebase-emulator
+    ports:
+      - "8082:8082"  # Firestore (container:8080 -> host:8082)
+      - "9099:9099"  # Auth (optional)
+    volumes:
+      - ./firestore-data:/firebase-data
+      - ./app/frontend/firebase.json:/home/node/firebase.json:ro
+      - ./app/frontend/firestore.rules:/home/node/firestore.rules:ro
+      - ./app/frontend/firestore.indexes.json:/home/node/firestore.indexes.json:ro
+    working_dir: /home/node
+
+# Then run backend directly:
+# cd backend
+# export NODE_ENV=development
+# export FIRESTORE_EMULATOR_HOST=localhost:8082
+# export GCP_PROJECT_ID=pageforge-local
+# export PORT=8080
+# export FIRESTORE_DATABASE_ID="(default)"
+# npm run dev
+#
+# Note: In development mode, IAP auth returns mock user (test@test.com/123)

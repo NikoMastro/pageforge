@@ -1,0 +1,49 @@
+# Dependencies (reinstalled in container)
+**/node_modules
+**/.pnpm-store
+
+# Backend (not needed for frontend build)
+backend/
+crawler/
+landingPageDeployment/
+linkbioDeployment/
+firestore-data/
+
+# Build outputs
+**/dist
+**/build
+**/.next
+**/.nuxt
+
+# Development/IDE
+**/.git
+**/.gitignore
+**/.vscode
+**/.idea
+**/*.swp
+**/*.swo
+**/.DS_Store
+
+# Logs and temp files
+**/*.log
+**/npm-debug.log*
+**/.npm
+**/coverage
+**/.nyc_output
+
+# Environment files (secrets)
+**/.env
+**/.env.*
+!**/.env.example
+
+# Documentation (not needed for build)
+**/README.md
+**/CHANGELOG.md
+**/LICENSE
+
+# Test files
+**/*.test.*
+**/*.spec.*
+**/__tests__
+**/__mocks__
+

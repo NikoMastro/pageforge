@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "kind": "LinkBio",
+  "id": "sample-game",
+  "meta": {
+    "title": "Sample Game",
+    "description": "A fast-paced action puzzle game. Build your LinkBio links here.",
+    "slug": "sample-game",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-02T12:34:56.000Z"
+  },
+  "appearance": {
+    "background": {
+      "type": "gradient",
+      "value": "linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%)"
+    },
+    "secondaryBackground": {
+      "type": "solid",
+      "value": "#0ea5e9"
+    },
+    "profileImageUrl": "https://imagedelivery.net/demo-media-account/4735ba26-e31d-44e2-c6d7-41e6fd46f000/public",
+    "faviconUrl": "https://imagedelivery.net/demo-media-account/4735ba26-e31d-44e2-c6d7-41e6fd46f000/public",
+    "illustrationUrl": "https://imagedelivery.net/demo-media-account/4735ba26-e31d-44e2-c6d7-41e6fd46f000/public"
+  },
+  "links": {
+    "stores": {
+      "steam": "https://store.steampowered.com/app/1234567/sample_game",
+      "epic": "https://store.epicgames.com/en-US/p/sample-game",
+      "epicCta": "Get on Epic",
+      "steamCta": "WishList on Steam"
+    },
+    "consoles": {
+      "playstation": "https://store.playstation.com/en-us/concept/0000000",
+      "xbox": "https://www.xbox.com/en-US/games/store/sample-game/000000000",
+      "playstationCta": "PlayStation Store",
+      "xboxCta": "Xbox Store"
+    },
+    "mobile": {
+      "ios": "https://apps.apple.com/app/id0000000000",
+      "android": "https://play.google.com/store/apps/details?id=com.example.sample",
+      "iosCta": "App Store",
+      "androidCta": "Google Play"
+    },
+    "social": {
+      "x": "https://x.com/samplegame",
+      "instagram": "https://instagram.com/samplegame",
+      "discord": "https://discord.gg/sample",
+      "youtube": "https://youtube.com/@samplegame"
+    },
+    "footer": {
+      "privacyUrl": "https://example.com/privacy",
+      "termsUrl": "https://example.com/terms"
+    }
+  },
+  "pixel": {
+    "enabled": true,
+    "mode": "full",
+    "gameId": "GAME-123",
+    "partnerId": "PARTNER-999",
+    "isTest": true
+  }
+}

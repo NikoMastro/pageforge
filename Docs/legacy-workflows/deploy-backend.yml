@@ -1,0 +1,86 @@
+name: Deploy Backend to Cloud Run
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+
+# Cancel in-progress runs for the same workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            .dockerignore
+            .github/workflows/deploy-backend.yml
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: "projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider"
+          service_account: "pageforge-github-actions@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and Push Docker image
+        working-directory: ./backend
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            --tag ${{ vars.ARTIFACT_REGISTRY_URL }}/${{ vars.BACKEND_IMAGE_NAME }}:${{ github.sha }} \
+            --tag ${{ vars.ARTIFACT_REGISTRY_URL }}/${{ vars.BACKEND_IMAGE_NAME }}:latest \
+            --cache-from type=registry,ref=${{ vars.ARTIFACT_REGISTRY_URL }}/${{ vars.BACKEND_IMAGE_NAME }}:cache \
+            --cache-to type=registry,ref=${{ vars.ARTIFACT_REGISTRY_URL }}/${{ vars.BACKEND_IMAGE_NAME }}:cache,mode=max \
+            --push \
+            -f Dockerfile.prod \
+            .
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run services update ${{ vars.CLOUD_RUN_SERVICE_BACKEND }} \
+            --image=${{ vars.ARTIFACT_REGISTRY_URL }}/${{ vars.BACKEND_IMAGE_NAME }}:${{ github.sha }} \
+            --region=${{ vars.REGION }} \
+            --project=${{ vars.GCP_PROJECT_ID }} \
+            --quiet
+
+      - name: Job Summary
+        run: |
+          echo "### Backend Deployment Summary :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Deployment Successful**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ github.ref == 'refs/heads/main' && 'production' || 'preprod' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Project**: ${{ vars.GCP_PROJECT_ID }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Service**: ${{ vars.CLOUD_RUN_SERVICE_BACKEND }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Region**: ${{ vars.REGION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image**: \`${{ vars.ARTIFACT_REGISTRY_URL }}/${{ vars.BACKEND_IMAGE_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
