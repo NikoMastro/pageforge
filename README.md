@@ -47,22 +47,23 @@ The UI runs on `http://localhost:5173`, the API on `http://localhost:8080`. `dev
 ### Showcase guardrails
 
 Because the demo is publicly writable, the backend enforces:
-- max **50 pages** per collection,
+- max **10 pages** per collection,
+- visitor-created pages **expire after 1 hour** (MongoDB TTL index),
 - max **20 saved versions** per page (older versions pruned),
 - max **1 MB** per document and per request body,
 - per-IP **rate limits** (120 reads/min, 20 writes/5 min — `backend/middleware/rateLimiter.js`),
-- the four seed pages cannot be deleted (`PROTECTED_PAGES`),
+- the four demo pages are **permanent and admin-locked**: modifying or deleting them requires the `x-admin-token` header matching `ADMIN_TOKEN` (`backend/config/showcase.js`),
 - the media library is **read-only** and scoped to one folder,
 - strict input validation (no Mongo operator injection, no search-expression breakout),
 - `robots.txt` asks crawlers to stay out of `/api/`.
 
-See `backend/mongoutils/storage.js` and `backend/routes/library/cloudinaryLibraryRoute.js`.
+See `backend/mongoutils/storage.js`, `backend/config/showcase.js`, and `backend/routes/library/cloudinaryLibraryRoute.js`.
 
 ### Seeding the demo pages
 
 ```bash
 node scripts/seed-demo-pages.js           # against http://localhost:8080
-API_URL=https://your-demo.vercel.app/api node scripts/seed-demo-pages.js
+ADMIN_TOKEN=... API_URL=https://your-demo.vercel.app/api node scripts/seed-demo-pages.js
 ```
 
 ### Deploy on Vercel

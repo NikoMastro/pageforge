@@ -3,13 +3,7 @@ const BaseRoute = require("../../core/baseRoute");
 // const { deleteByPageName } = require("../../firestoreutils/deleteFromFirestore");
 const { deleteByPageName } = require("../../mongoutils/storage");
 
-// Showcase seed pages that visitors cannot delete (they can still create
-// versions; history is capped and restorable). Override with PROTECTED_PAGES.
-const PROTECTED_PAGES = (process.env.PROTECTED_PAGES ||
-  "hades,stardew-valley,hollow-knight,celeste")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
+const { isProtectedPage, isAdminRequest } = require("../../config/showcase");
 
 class CommonRoute extends BaseRoute {
   constructor() {
@@ -38,9 +32,10 @@ class CommonRoute extends BaseRoute {
           });
         }
 
-        if (collection === "lps" && PROTECTED_PAGES.includes(pageName)) {
+        // Permanent showcase pages can only be deleted with the admin token
+        if (isProtectedPage(collection, pageName) && !isAdminRequest(req)) {
           return res.status(403).json({
-            error: `'${pageName}' is a showcase demo page and cannot be deleted. Create your own page to experiment.`,
+            error: `'${pageName}' is a permanent showcase page and cannot be deleted. Create your own page to experiment.`,
           });
         }
 

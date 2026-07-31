@@ -9,6 +9,7 @@ const {
   getFromFirestore,
   listItems,
 } = require("../mongoutils/storage");
+const { isProtectedPage, isAdminRequest } = require("../config/showcase");
 
 class BaseRoute {
   constructor(collectionName, requiredFields = []) {
@@ -109,6 +110,14 @@ class BaseRoute {
       );
       if (!isValid) {
         return res.status(400).json({ error });
+      }
+
+      // Permanent showcase pages can only be changed with the admin token
+      const pageName = req.body?.metadata?.page_name;
+      if (isProtectedPage(this.collectionName, pageName) && !isAdminRequest(req)) {
+        return res.status(403).json({
+          error: `'${pageName}' is a permanent showcase page and cannot be modified. Create your own page to experiment.`,
+        });
       }
 
       // Allow custom preprocessing of data before save

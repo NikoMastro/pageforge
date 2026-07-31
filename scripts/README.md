@@ -7,5 +7,5 @@
   ```bash
   # backend must be running (npm run dev:backend)
   node scripts/seed-demo-pages.js            # -> http://localhost:8080
-  API_URL=https://your-demo.vercel.app/api node scripts/seed-demo-pages.js
+  ADMIN_TOKEN=... API_URL=https://your-demo.vercel.app/api node scripts/seed-demo-pages.js
   ```

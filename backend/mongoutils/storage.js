@@ -10,17 +10,20 @@
  * counterparts, so consuming routes only change a require path.
  *
  * Showcase guardrails (this is a public, writable demo):
- *   - max 50 distinct page_name per collection (MAX_PAGES_PER_COLLECTION)
+ *   - max 10 distinct page_name per collection (MAX_PAGES_PER_COLLECTION)
  *   - max 20 saved versions per page_name (older ones are pruned)
  *   - max 1 MB per saved document
+ *   - visitor-created documents expire after 1 hour via a MongoDB TTL index
+ *     (protected showcase pages never expire — see ../config/showcase.js)
  */
 const { MongoClient } = require("mongodb");
+const { NEW_PAGE_TTL_MS, isProtectedPage } = require("../config/showcase");
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const MONGODB_DB = process.env.MONGODB_DB || "pageforge";
 
 const MAX_PAGES_PER_COLLECTION = parseInt(
-  process.env.MAX_PAGES_PER_COLLECTION || "50",
+  process.env.MAX_PAGES_PER_COLLECTION || "10",
   10
 );
 const MAX_VERSIONS_PER_PAGE = parseInt(
@@ -40,10 +43,21 @@ async function getDb() {
   return client.db(MONGODB_DB);
 }
 
+// Ensure the TTL index that expires visitor-created documents. Mongo's TTL
+// monitor deletes documents once their `expiresAt` date passes; documents
+// without the field (protected pages) are never touched. createIndex is
+// idempotent — track per collection to avoid a round-trip on every save.
+const ttlEnsured = new Set();
+async function ensureTtlIndex(col) {
+  if (ttlEnsured.has(col.collectionName)) return;
+  await col.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+  ttlEnsured.add(col.collectionName);
+}
+
 /** Serialize a stored document to the shape the frontend expects. */
 function toApiDoc(doc) {
   if (!doc) return doc;
-  const { _id, serverTimestamp, ...rest } = doc;
+  const { _id, serverTimestamp, expiresAt, ...rest } = doc;
   return {
     ...rest,
     serverTimestamp:
@@ -114,8 +128,17 @@ async function SavetoFirestore(data, collection) {
       }
     }
 
+    await ensureTtlIndex(col);
+
+    // Visitor-created documents self-destruct after NEW_PAGE_TTL_MS;
+    // protected showcase pages are permanent (no expiresAt field).
+    const expiry = isProtectedPage(collection, pageName)
+      ? {}
+      : { expiresAt: new Date(Date.now() + NEW_PAGE_TTL_MS) };
+
     const result = await col.insertOne({
       ...data,
+      ...expiry,
       serverTimestamp: new Date(),
     });
 

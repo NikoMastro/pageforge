@@ -300,9 +300,12 @@ async function main() {
       page_name: page,
       lp_json, hashid,
     };
+    const headers = { "Content-Type": "application/json" };
+    // Seed pages are admin-protected; pass ADMIN_TOKEN to (re)seed them.
+    if (process.env.ADMIN_TOKEN) headers["x-admin-token"] = process.env.ADMIN_TOKEN;
     const res = await fetch(`${API}/lp/save`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ metadata }),
     });
     console.log(`${page}: ${res.status}`, JSON.stringify(await res.json()));
