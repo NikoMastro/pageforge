@@ -23,7 +23,21 @@ const CloudinaryLibraryRoute = require("./routes/library/cloudinaryLibraryRoute"
 
 // Setup middleware
 app.use(corsMiddleware("pageforge-frontend")); // Allow requests from pageforge-frontend domain
-app.use(express.json()); // Add middleware to parse JSON bodies
+
+// Public-showcase protections: per-IP rate limiting (anti flood / brute force)
+const rateLimiter = require("./middleware/rateLimiter");
+app.use(rateLimiter);
+
+// Baseline security headers for API responses
+app.use((req, res, next) => {
+  res.set("X-Content-Type-Options", "nosniff");
+  res.set("X-Frame-Options", "SAMEORIGIN");
+  res.set("Referrer-Policy", "no-referrer");
+  next();
+});
+
+// JSON body limit aligned with the 1 MB per-document storage cap
+app.use(express.json({ limit: "1mb" })); // Add middleware to parse JSON bodies
 
 // Initialize route registry
 const registry = new RouteRegistry();

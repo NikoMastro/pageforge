@@ -3,6 +3,14 @@ const BaseRoute = require("../../core/baseRoute");
 // const { deleteByPageName } = require("../../firestoreutils/deleteFromFirestore");
 const { deleteByPageName } = require("../../mongoutils/storage");
 
+// Showcase seed pages that visitors cannot delete (they can still create
+// versions; history is capped and restorable). Override with PROTECTED_PAGES.
+const PROTECTED_PAGES = (process.env.PROTECTED_PAGES ||
+  "hades,stardew-valley,hollow-knight,celeste")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 class CommonRoute extends BaseRoute {
   constructor() {
     super("common", []); // No required fields for common operations
@@ -27,6 +35,12 @@ class CommonRoute extends BaseRoute {
         if (!pageName) {
           return res.status(400).json({
             error: "Page name is required",
+          });
+        }
+
+        if (collection === "lps" && PROTECTED_PAGES.includes(pageName)) {
+          return res.status(403).json({
+            error: `'${pageName}' is a showcase demo page and cannot be deleted. Create your own page to experiment.`,
           });
         }
 

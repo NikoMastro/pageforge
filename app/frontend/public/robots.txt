@@ -1,0 +1,4 @@
+# PageForge showcase — please do not crawl the API or hammer the demo.
+User-agent: *
+Disallow: /api/
+Crawl-delay: 10
