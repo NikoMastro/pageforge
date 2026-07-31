@@ -1,8 +1,19 @@
 # PageForge — Landing Page Builder
 
-A visual builder that turns landing pages and link-in-bio profiles into versioned JSON configurations, with live WYSIWYG preview, configuration management, A/B experiment tooling, and a one-click deployment pipeline.
+A visual builder that turns game landing pages and link-in-bio profiles into **versioned JSON configurations** — live WYSIWYG preview, revision history, A/B experiment tooling, and a one-click deployment pipeline.
 
 > **Showcase repository.** This is a sanitized version of a production platform built for a client. Branding, credentials, infrastructure identifiers, and data have been removed or replaced. The GCP-based deployment pipeline is **disabled but kept in the code (commented out)** so the architecture stays reviewable; storage runs on **MongoDB** instead of Firestore so anyone can run and try the builder.
+
+## What it does
+
+- **Landing page editor** — compose pages from configurable sections (hero, Steam store widget, video player, screenshot carousel, media grid, feature columns, FAQ, footer…) with three presets (Basic / Widget / Full-Content), per-section solid/gradient/image backgrounds, and live preview in phone / macbook / desktop frames.
+- **LinkBio editor** — link-in-bio profiles (stores, consoles, mobile, socials, footer) rendered from the same JSON-first pipeline.
+- **Everything is versioned** — each save is an immutable revision with author, message, and timestamp; pages are plain JSON all the way down.
+- **Experiments & configs** — A/B experiment definitions and shared configuration documents managed through the same storage layer.
+- **URL Tester** — an in-process crawler (Playwright + Lighthouse) that audits any URL: performance scores, pixel/iframe detection, redirects (local runs only).
+- **Media library** — read-only, folder-scoped Cloudinary browsing.
+
+The five demo pages (four game landing pages — *Hades, Stardew Valley, Hollow Knight, Celeste* — and the *PageForge Games* LinkBio hub) are seeded from real Steam store data with official YouTube trailers, and are permanent: visitors can inspect them in the editor but not alter them.
 
 ## What's inside
 
@@ -15,11 +26,13 @@ A visual builder that turns landing pages and link-in-bio profiles into versione
 ├── backend/                 Express API — page/config/experiment CRUD
 │   ├── mongoutils/          MongoDB storage adapter (showcase storage)
 │   ├── firestoreutils/      Original Firestore storage (kept for reference)
+│   ├── config/showcase.js   Public-demo protection policy
 │   ├── routes/              REST routes; GCP/Cloudflare ones disabled-but-visible
 │   └── utils/               Cloud Build orchestration (disabled in showcase)
 ├── crawler/                 URL analyzer (Playwright + Lighthouse) — ran as a GCP
 │                            Cloud Function in production, runs in-process here
 ├── api/                     Vercel serverless wrapper around the Express backend
+├── scripts/                 Demo page seeding
 └── Docs/                    Architecture & API docs + legacy deploy workflows
 ```
 
@@ -44,31 +57,47 @@ npm run dev
 
 The UI runs on `http://localhost:5173`, the API on `http://localhost:8080`. `dev:backend` loads `.env` automatically (Node `--env-file-if-exists`). Alternatively, `docker compose up` starts a local MongoDB + backend without Atlas.
 
+Seed the demo pages (game LPs + LinkBio hub):
+
+```bash
+ADMIN_TOKEN=... node scripts/seed-demo-pages.js
+```
+
 ### Showcase guardrails
 
 Because the demo is publicly writable, the backend enforces:
-- max **10 pages** per collection,
-- visitor-created pages **expire after 1 hour** (MongoDB TTL index),
-- max **20 saved versions** per page (older versions pruned),
-- max **1 MB** per document and per request body,
-- per-IP **rate limits** (120 reads/min, 20 writes/5 min — `backend/middleware/rateLimiter.js`),
-- the four demo pages are **permanent and admin-locked**: modifying or deleting them requires the `x-admin-token` header matching `ADMIN_TOKEN` (`backend/config/showcase.js`),
-- the media library is **read-only** and scoped to one folder,
-- strict input validation (no Mongo operator injection, no search-expression breakout),
-- `robots.txt` asks crawlers to stay out of `/api/`.
 
-See `backend/mongoutils/storage.js`, `backend/config/showcase.js`, and `backend/routes/library/cloudinaryLibraryRoute.js`.
+| Protection | Detail |
+|---|---|
+| Page cap | max **10 pages** per collection |
+| Self-cleaning | visitor-created pages **expire after 1 hour** (MongoDB TTL index) |
+| Version cap | max **20 saved versions** per page (older versions pruned) |
+| Size cap | max **1 MB** per document and per request body |
+| Rate limits | per-IP, **120 reads/min · 20 writes/5 min** |
+| Permanent pages | demo pages are **admin-locked** — modifying or deleting them requires the `x-admin-token` header matching `ADMIN_TOKEN` (fail closed) |
+| Media library | **read-only**, scoped to a single Cloudinary folder |
+| Input validation | no Mongo operator injection, no search-expression breakout |
+| Crawlers | `robots.txt` asks bots to stay out of `/api/` |
 
-### Seeding the demo pages
-
-```bash
-node scripts/seed-demo-pages.js           # against http://localhost:8080
-ADMIN_TOKEN=... API_URL=https://your-demo.vercel.app/api node scripts/seed-demo-pages.js
-```
+See `backend/config/showcase.js`, `backend/mongoutils/storage.js`, and `backend/middleware/rateLimiter.js`.
 
 ### Deploy on Vercel
 
-Import the repo — `vercel.json` builds the frontend and runs the backend as a serverless function under `/api`. Set `MONGODB_URI` (and optionally `MONGODB_DB`) in the Vercel project's environment variables.
+Import the repo — `vercel.json` builds the frontend and runs the backend as a serverless function under `/api`. Set the environment variables in the Vercel project:
+
+| Variable | Purpose |
+|---|---|
+| `MONGODB_URI` | your MongoDB cluster (required) |
+| `MONGODB_DB` | database name (default `pageforge`) |
+| `ADMIN_TOKEN` | long random string protecting the permanent demo pages |
+| `CLOUDINARY_URL` | `cloudinary://key:secret@cloud_name` for the media library |
+| `CLOUDINARY_FOLDER` | folder served by the library (default `ShowcasePCH`) |
+
+Then seed the demo pages against the deployment:
+
+```bash
+ADMIN_TOKEN=... API_URL=https://your-demo.vercel.app/api node scripts/seed-demo-pages.js
+```
 
 ### URL Tester (local only)
 
@@ -82,10 +111,11 @@ In production the crawler was a GCP Cloud Function called through an authenticat
 
 ### Media library (read-only)
 
-In production the library was Cloudflare Images/Stream. The showcase serves a **read-only Cloudinary folder** instead (`backend/routes/library/cloudinaryLibraryRoute.js`): only list/get endpoints exist, results are scoped to one folder, responses are cached, and all upload/edit/delete endpoints return 403. Configure with `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>` (see `.env.example`); linking media by URL in the editor is a plain text field and stays available.
+In production the library was Cloudflare Images/Stream. The showcase serves a **read-only Cloudinary folder** instead (`backend/routes/library/cloudinaryLibraryRoute.js`): only list/get endpoints exist, results are scoped to one folder, responses are cached, and all upload/edit/delete endpoints return 403. Linking media by URL in the editor is a plain text field and stays available.
 
 ## Notes
 
 - The **Deploy** buttons return HTTP 501 in the showcase — deployment needed the client's GCP pipeline.
 - AI video generation (Vertex AI) and the Cloudflare integrations are disabled; their code remains for review.
 - Legacy CI/CD workflows (Cloud Run deploys via Workload Identity Federation) are parked in `Docs/legacy-workflows/`.
+- Demo page content (game art, screenshots, trailers) is hotlinked from Steam's public CDN and official YouTube channels for demonstration purposes; all rights belong to their respective owners.
